@@ -1,0 +1,2 @@
+namespace :migration do
+end
