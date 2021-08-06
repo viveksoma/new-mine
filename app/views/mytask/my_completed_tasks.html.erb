@@ -1,0 +1,28 @@
+
+
+<br>
+<%= link_to 'Show open task', mytask_open_path %>
+<br>
+<%= link_to 'Back', root_path %>
+<br>
+<h1>Completed Tasks</h1>
+
+<table style="width: 500px;">
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Assignee</th>
+      <th>Estimation</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @completed_items.each do |item| %>
+      <tr>
+        <td><%= item.content %></td>
+        <td><%= @users[item.assignees.to_i].name %></td>
+        <td><%= item.estimate %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

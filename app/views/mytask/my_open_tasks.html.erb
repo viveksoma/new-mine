@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<br>
+<%= link_to 'Show completed task', mytask_completed_path %>
+<br>
+<%= link_to 'Back', root_path %>
+<br>
+
+<h1>My Tasks</h1>
+
+<table style="width: 500px;">
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Assignee</th>
+      <th>Estimation</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @items.each do |item| %>
+      <tr>
+        <td><%= item.content %></td>
+        <td><%= @users[item.assignees.to_i].name %></td>
+        <td><%= item.estimate %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

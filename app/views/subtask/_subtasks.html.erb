@@ -1,0 +1,9 @@
+<li>
+  <ul>
+    <% subtasks.each do |subtask| %>
+      <% if subtask.id? %>
+        <%= render 'subtask/subtask', subtask: subtask  %>
+      <% end %>
+    <% end %>
+  </ul>
+</li>

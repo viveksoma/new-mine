@@ -1,0 +1,9 @@
+<%= form_for [@project, @list, @item] do |f| %>
+  <div class="field">
+    <%= f.hidden_field :parent_id, { :value => @list.id } %>
+    <%= f.hidden_field :project_id, { :value => @project.id } %>
+    <%= f.hidden_field :type, { :value => "task" } %>
+    <%= f.text_field :content, placeholder: "Create new item" %>
+  </div>
+  <%= f.submit "Post", class: "btn btn-primary" %>
+<% end %>

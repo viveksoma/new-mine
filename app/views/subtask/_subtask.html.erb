@@ -1,0 +1,20 @@
+<li style="display: flex">
+  <p><%= subtask.content %></p>
+  <div style="margin: 0px 10px"><%= link_to "delete", [@project, @list, subtask],
+  :method => :delete, :confirm => "Really?" %></div>
+  <div style="margin-right: 40px;">
+    <%= form_for([@project, @list, @item]) do |f| %>
+      <div style="display: flex">
+        <%= f.hidden_field :parent_id, { :value => subtask.id } %>
+        <%= f.hidden_field :type, { :value => "subtask" } %>
+        <%= f.text_field :content, placeholder: "Create new subtask" %>
+        <%= f.submit "Post", class: "btn btn-primary btn-sm" %>
+      </div>
+    <% end %>
+  </div>
+</li>
+<% parent_id = subtask.id
+  subtasks = @list.items.where(type: 'subtask').where(parent_id: parent_id)
+  if subtasks.any? %>
+    <%= render 'subtask/subtasks', subtasks: subtasks  %>
+<% end %>

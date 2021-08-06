@@ -1,0 +1,2 @@
+module MytaskHelper
+end

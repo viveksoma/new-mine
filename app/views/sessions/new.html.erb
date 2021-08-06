@@ -1,0 +1,5 @@
+<h1>Sessions#new</h1>
+<%= form_for(:session, url: login_path) do |f| %>
+  <%= select("session", "user_id", User.all.collect {|u| [ u.name, u.id ] }, { include_blank: true }) %>
+  <%= f.submit "Post", class: "btn btn-primary" %>
+<% end %>

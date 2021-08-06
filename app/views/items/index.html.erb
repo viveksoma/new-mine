@@ -1,0 +1,93 @@
+
+<div class="col-md-3">
+<% if @lists.any? %>
+<h2>Lists</h2>
+<table>
+  <tbody>
+    <% @lists.each do |list| %>
+      <% if list.id? %>
+        <tr>
+          <td><%= link_to list.name, project_list_path(@project, list) %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+</div>
+<div class="col-md-9">
+  <p>
+  <strong>List name:</strong>
+  <%= @list.name %>
+  </p>
+
+  <%= link_to 'Back', project_path(@project) %>
+  </br>
+  </br>
+  <strong>Create item:</strong>
+  <div class="stats">
+  <%= render 'items/new' %>
+  </div>
+  <div>
+  <% 
+  if @list.items.any? %>
+    <h2>Items (<%= @list.items.where(type: 'task').count %>)</h2>
+    <ul>
+      <% @list.items.where(type: 'task').each do |item| %>
+        <% if item.id? %>
+          <li style="display: flex">
+            <p><%= item.content %></p>
+            <div style="margin: 0px 10px"><%= link_to "delete", [@project, @list, item],
+            :method => :delete, :confirm => "Really?" %></div>
+            <div style="margin-right: 40px;">
+              <%= form_for([@project, @list, @item]) do |f| %>
+                <div style="display: flex">
+                  <%= f.hidden_field :parent_id, { :value => item.id } %>
+                  <%= f.hidden_field :type, { :value => "subtask" } %>
+                  <%= f.text_field :content, placeholder: "Create new subtask" %>
+                  <%= f.submit "Post", class: "btn btn-primary btn-sm" %>
+                </div>
+              <% end %>
+            </div>
+            <%= form_for([@project, @list, item]) do |f| %>
+              <div style="display: flex">
+                <% default_checked = 
+                item.assignees == @user.id.to_s rescue false %>
+                <label class="rightpad">
+                  <%= f.check_box :assignees, {checked: default_checked}  %>
+                </label>
+                <span>
+                  <%= @user.name %>
+                </span>
+                <%= f.submit "Assign", class: "btn btn-primary btn-sm" %>
+              </div>
+            <% end %>
+            <%= form_for([@project, @list, item]) do |f| %>
+              <div style="display: flex; margin-left: 5px">
+                <label class="rightpad">
+                  <%= f.check_box :is_completed, {checked: item.is_completed}  %>
+                </label>
+                <span>
+                  Is completed
+                </span>
+                <%= f.submit "Update", class: "btn btn-primary btn-sm" %>
+              </div>
+            <% end %>
+            <%= form_for([@project, @list, item]) do |f| %>
+              <div class="field" style="display: flex; margin-left: 5px">
+                <%= f.number_field :estimate, placeholder: "Estimate", style: "width: 90px" %>
+                <%= f.submit "Estimate", class: "btn btn-primary btn-sm" %>
+              </div>
+            <% end %>
+          </li>
+          <% parent_id = item.id
+          subtasks = @list.items.where(type: 'subtask').where(parent_id: parent_id)
+          if subtasks.any? %>
+            <%= render 'subtask/subtasks', subtasks: subtasks  %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
+  </div>
+</div>
